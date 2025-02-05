@@ -39,3 +39,4 @@ output "public_ip" {
   value      = data.aws_instance.example.public_ip
   description = "Public IP address of the VM"
 }
+
