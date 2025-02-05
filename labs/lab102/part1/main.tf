@@ -1,6 +1,6 @@
 #moc apply
 variable "emptyIp" {
-    default=" "
+    default="18.212.84.35"
 }
 
 #aws_instance.vm.public_ip
