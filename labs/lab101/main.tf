@@ -46,6 +46,11 @@ resource "aws_instance" "vm" {
   }
 }
 
+# #mocked ip
+# variable "emptyIp" {
+#     default="18.212.84.35"
+# }
+
 resource "null_resource" "check_public_ip" {
   provisioner "local-exec" {
     command = <<EOT

@@ -1,9 +1,7 @@
-#moc apply
+#mocked ip
 variable "emptyIp" {
     default="18.212.84.35"
 }
-
-#aws_instance.vm.public_ip
 
 resource "null_resource" "check_public_ip" {
   provisioner "local-exec" {
@@ -11,9 +9,11 @@ resource "null_resource" "check_public_ip" {
       if [ -z "${var.emptyIp}" ]; then     #
         echo "ERROR: Public IP address was not assigned." >&2
         exit 1
+        else
+        echo "We got the IP!"
       fi
     EOT
   }
 
-  depends_on = [var.emptyIp]   #changing the depand later
+  #depends_on = [var.emptyIp]   #changing the depand later
 }
