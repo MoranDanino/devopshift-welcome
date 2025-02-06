@@ -17,24 +17,36 @@ variable "emptyip" {
    default = ""
 }
 
+# variable "ingress_ports" {
+#   description = "List of allowed ingress ports"
+#   type        = list(number)
+#   default     = [22]  # Default is only SSH, can be overridden
+# }
+
 
 resource "aws_security_group" "sg" {
- ingress {
-   from_port   = 22
-   to_port     = 22
-   protocol    = "tcp"
-   cidr_blocks = ["0.0.0.0/0"]
- }
-
-
- egress {
-   from_port   = 0
-   to_port     = 0
-   protocol    = "-1"
-   cidr_blocks = ["0.0.0.0/0"]
+    #  dynamic "ingress" {
+    #     for_each = var.ingress_ports
+    #     content {
+    #       from_port   = ingress.value
+    #       to_port     = ingress.value
+    #       protocol    = "tcp"
+    #       cidr_blocks = ["0.0.0.0/0"]
+    #     }
+    #   }
+    ingress {
+      from_port   = 22
+      to_port     = 22
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+    egress {
+      from_port   = 0
+      to_port     = 0
+      protocol    = "-1"
+      cidr_blocks = ["0.0.0.0/0"]
  }
 }
-
 
 resource "aws_instance" "vm" {
   ami           = var.ami
@@ -80,6 +92,11 @@ output "printmachinetype" {
 
 output "printami" {
     value = var.ami
+}
+
+output "security_group_id" {
+  value       = aws_security_group.sg.id
+  description = "The ID of the created security group"
 }
 
 
