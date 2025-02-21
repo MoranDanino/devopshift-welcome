@@ -12,10 +12,17 @@ class Aws_Validation:
     public_ip: str
     load_balancer_dns: str
 
+
+#it working manually, not automaticly
 def get_terraform_output(output_name):
     result = subprocess.run(["terraform", "output", "-json"], capture_output=True, text=True)
-    outputs = json.loads(result.stdout)
-    return outputs.get(output_name, {}).get("value")
+    try:
+        outputs = json.loads(result.stdout)
+        return outputs.get(output_name, {}).get("value")
+    except json.JSONDecodeError:
+        print("Error: problem with terraform output")
+        return None
+
 
 
 def list_instances(INSTANCE_ID):
