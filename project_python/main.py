@@ -1,6 +1,3 @@
-# import boto3
-# import subprocess
-# import json
 from botocore.exceptions import ClientError
 from models import Aws_Validation, exec_file_as_json, list_instances, list_alb, get_terraform_output
 import subprocess
