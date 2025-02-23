@@ -1,0 +1,37 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: istio-ingressgateway
+  namespace: istio-system
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"  # Allow all hosts (change if using a specific domain)
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: pgadmin4
+  namespace: istio-system  # Ensure pgAdmin is deployed in the correct namespace
+spec:
+  hosts:
+  - "*"  # Change this to your domain if needed
+  gateways:
+  - istio-ingressgateway
+  http:
+  - match:
+    - uri:
+        prefix: /pgadmin
+    rewrite:
+      uri: /
+    route:
+    - destination:
+        host: pgadmin4
+        port:
+          number: 80
