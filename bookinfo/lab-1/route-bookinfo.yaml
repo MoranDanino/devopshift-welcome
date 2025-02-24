@@ -32,7 +32,7 @@ spec:
       port: 9080
   - matches:
     - path:
-        type: Exact
+        type: Exact    #Big letter!
         value: "/logout"
     backendRefs:
     - name: productpage
