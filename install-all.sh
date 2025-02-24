@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ROOTFOLDER="/home/ubuntu/workarea/devopshift/welcome/istio/"
+ROOTFOLDER="/home/ubuntu/workarea/jb/welcome/istio/"
 
 # Function to prompt user for installation choice
 function prompt_installation_choice() {
