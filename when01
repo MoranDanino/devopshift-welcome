@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     stages {
-        stage('jenkins-workshop') {
+        stage('master') {
             when {
-                branch 'jenkins-workshop'
+                branch 'master'
             }
             steps {
                 echo 'Deploying to production...'
