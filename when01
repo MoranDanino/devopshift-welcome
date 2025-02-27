@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     stages {
-        stage('Deploy') {
+        stage('jenkins-workshop') {
             when {
                 branch 'main'
             }
