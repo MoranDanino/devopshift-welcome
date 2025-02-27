@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('jenkins-workshop') {
             when {
-                branch 'main'
+                branch 'jenkins-workshop'
             }
             steps {
                 echo 'Deploying to production...'
