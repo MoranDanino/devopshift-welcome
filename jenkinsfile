@@ -27,7 +27,7 @@ pipeline {
                    env.BRANCH_NAME = env.APP_DEBUG == 'true' ? env.DEBUG_BRANCH : env.BRANCH_NAME
                    
                    // Print the deployment message
-                   echo "hi liad: ${env.BRANCH_NAME}..."
+                   echo "my branch name: ${env.BRANCH_NAME}..."
                  
                    // Call the mock deployApp function with the current branch name
                    myLibrary.deployApp(env.BRANCH_NAME)
