@@ -112,17 +112,17 @@ pipeline {
                 }
             }
         }
-    }
 
-    stage('archive log'){
-        steps{
-            sh """
-                ls
-                touch myfile.txt
-                """
-            archiveArtifacts artifacts: 'myfile.txt', allowEmptyArchive: true
-        }
-    } //end og archive log
+        stage('archive log'){
+            steps{
+                sh """
+                    ls
+                    touch myfile.txt
+                    """
+                archiveArtifacts artifacts: 'myfile.txt', allowEmptyArchive: true
+            }
+        } //end og archive log
+    }
 
     post {
         always {
