@@ -118,11 +118,11 @@ pipeline {
         steps{
             sh """
                 ls
-                pwd
+                touch myfile.txt
                 """
+            archiveArtifacts artifacts: 'myfile.txt', allowEmptyArchive: true
         }
-
-    }
+    } //end og archive log
 
     post {
         always {
