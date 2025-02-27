@@ -114,6 +114,16 @@ pipeline {
         }
     }
 
+    stage('archive log'){
+        steps{
+            sh """
+                ls
+                pwd
+                """
+        }
+
+    }
+
     post {
         always {
             dir("${PROJECT_HOME}") {
