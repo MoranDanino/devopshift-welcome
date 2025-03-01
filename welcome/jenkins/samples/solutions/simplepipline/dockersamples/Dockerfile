@@ -1,7 +1,8 @@
 # STAGE BUILD
 FROM python:3.11.10-alpine3.20 AS builder
 RUN echo 'this is builder im running build'
-COPY ./src/hello.py /src/hello.py
+COPY . .
+#./src/hello.py /src/hello.py
 CMD ["sleep","5"]
 
 
