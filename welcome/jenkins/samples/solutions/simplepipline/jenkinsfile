@@ -24,8 +24,11 @@ pipeline {
                         // Install virtualenv if not available
                          echo "Builder"
                          sh '''#!/bin/bash
-                                
-                                docker build --target build -t yaniv -f $DOCKERFILESRC .
+                            echo "Listing contents of $DOCKERFILESRC:"
+                            ls -la $DOCKERFILESRC
+
+                            // Attempt to build docker image
+                            docker build --target build -t yaniv -f $DOCKERFILESRC .
 
                         '''
                     }
