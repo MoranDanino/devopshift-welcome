@@ -1,0 +1,87 @@
+pipeline {
+    agent any
+    stages {
+        stage('Checkout') {
+            steps {
+                script {
+                    // Define reusable function within the script block
+                    def runStage = { stage_name, command ->
+                        stage(stage_name) {
+                            echo "Starting stage: ${stage_name}"
+                            sh command
+                        }
+                    }
+
+                    // Clone repo from git
+                    runStage('Clone', 'echo "Cloning repository..."')
+
+                    // Build stage
+                    runStage('Build', 'echo "Building Python project..."')
+
+                    // Test stages - parallel tasks
+                    def parallelStep = ['Linting', 'Security']
+
+                    stage('Parallel tasks') {
+                        parallel(
+                            'Linting': {
+                                runStage('Linting', 'echo "Running Python linting (e.g., flake8)..."')
+                            },
+                            'Security': {
+                                runStage('Security', 'echo "Running security checks (e.g., safety)..."')
+                            }
+                        )
+                    }
+
+                    // User input for deployment
+                    stage('Wait for User Approval') {
+                        def userInput = input message: 'Continue to deployment?', parameters: [
+                            choice(name: 'Proceed', choices: ['Proceed', 'Abort'], description: 'Choose an option')
+                        ]
+                        // Set the user input value to the environment variable
+                        env.USER_CHOICE = userInput
+                    }
+
+                    // Proceed with deployment if user chooses 'Proceed'
+                    stage('Continue to deployment') {
+                        when {
+                            expression { env.USER_CHOICE == 'Proceed' }
+                        }
+                        steps {
+                            script {
+                                echo 'Continuing to deployment...'
+                            }
+                        }
+                    }
+
+                    // Abort deployment if user chooses 'Abort'
+                    stage('Abort the deployment') {
+                        when {
+                            expression { env.USER_CHOICE == 'Abort' }
+                        }
+                        steps {
+                            script {
+                                error 'Pipeline aborted by the user - cannot run deployment'
+                            }
+                        }
+                    }
+
+                    // Deployment stage
+                    stage('Deployment') {
+                        steps {
+                            script {
+                                if (env.USER_CHOICE == 'Proceed') {
+                                    runStage('Deployment', 'echo "Deploying Python project to production..."')
+                                } else {
+                                    echo "Pipeline aborted by the user"
+                                }
+                            }
+                        }
+                    }
+
+                    // Cleanup stage
+                    runStage('Cleanup', 'echo "Cleaning up the workspace..."')
+                }
+            }
+        }
+    }
+}
