@@ -42,38 +42,24 @@ pipeline {
                     }
 
                     // Proceed with deployment if user chooses 'Proceed'
-                    stage('Continue to deployment') {
-                        when {
-                            expression { env.USER_CHOICE == 'Proceed' }
-                        }
-                        steps {
+                    if (env.USER_CHOICE == 'Proceed') {
+                        stage('Continue to deployment') {
                             script {
                                 echo 'Continuing to deployment...'
                             }
                         }
-                    }
 
-                    // Abort deployment if user chooses 'Abort'
-                    stage('Abort the deployment') {
-                        when {
-                            expression { env.USER_CHOICE == 'Abort' }
-                        }
-                        steps {
+                        // Deployment stage
+                        stage('Deployment') {
                             script {
-                                error 'Pipeline aborted by the user - cannot run deployment'
+                                runStage('Deployment', 'echo "Deploying Python project to production..."')
                             }
                         }
-                    }
-
-                    // Deployment stage
-                    stage('Deployment') {
-                        steps {
+                    } else {
+                        // Abort deployment if user chooses 'Abort'
+                        stage('Abort the deployment') {
                             script {
-                                if (env.USER_CHOICE == 'Proceed') {
-                                    runStage('Deployment', 'echo "Deploying Python project to production..."')
-                                } else {
-                                    echo "Pipeline aborted by the user"
-                                }
+                                error 'Pipeline aborted by the user - cannot run deployment'
                             }
                         }
                     }
