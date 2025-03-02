@@ -1,16 +1,121 @@
+// pipeline {
+//     agent any
+
+//     environment {
+//         DOCKERHUB_CREDENTIALS = 'dockerhub-credentials'
+//         REPO_NAME = 'myimages'
+//         IMAGE_NAME = 'mypython_image'
+//     }
+
+//     stages {
+//         stage('Clone Repository') {
+//             steps {
+//                 git branch: 'jenkins-workshop', url: 'https://github.com/MoranDanino/devopshift-welcome.git'
+//             }
+//         }
+
+//         stage('Install Dependencies') {
+//             agent {
+//                 docker {
+//                     image 'python:3.9'
+//                     args '-v $HOME/.cache/pip:/root/.cache/pip'
+//                 }
+//             }
+//             steps {
+//                 sh "pip install faker"
+//             }
+//         }
+
+//         stage('Test Application') {
+//             matrix {
+//                 axes {
+//                     axis {
+//                         name 'PYTHON_VERSION'
+//                         values "3.8", "3.9"  // ✅ Fixed: Now a valid list
+//                     }
+//                 }
+//                 stages {
+//                     stage('Run Test') {
+//                         agent {
+//                             docker {
+//                                 image "python:${PYTHON_VERSION}"
+//                                 reuseNode true
+//                             }
+//                         }
+//                         steps {
+//                             sh 'python app.py'
+//                         }
+//                     }
+//                 }
+//             }
+//         }
+
+//         stage('Build Docker Images') {
+//             matrix {
+//                 axes {
+//                     axis {
+//                         name 'PYTHON_VERSION'
+//                         values "3.8", "3.9"  // ✅ Fixed: No undefined variable
+//                     }
+//                 }
+//                 stages {
+//                     stage('Build Image') {
+//                         steps {
+//                             script {
+//                                 sh """
+//                                     docker build --build-arg PYTHON_VERSION=${PYTHON_VERSION} -t ${REPO_NAME}:${PYTHON_VERSION} .
+//                                 """
+//                             }
+//                         }
+//                     }
+//                 }
+//             }
+//         }
+
+//         stage('Push to DockerHub') {
+//             matrix {
+//                 axes {
+//                     axis {
+//                         name 'PYTHON_VERSION'
+//                         values "3.8", "3.9"  // ✅ Fixed: No undefined variable
+//                     }
+//                 }
+//                 stages {
+//                     stage('Push Image') {
+//                         steps {
+//                             script {
+//                                 docker.withRegistry('https://index.docker.io/v1/', env.DOCKERHUB_CREDENTIALS) {
+//                                     def appImage = docker.image("${REPO_NAME}:${PYTHON_VERSION}")
+//                                     appImage.push()
+//                                 }
+//                             }
+//                         }
+//                     }
+//                 }
+//             }
+//         }
+//     }
+
+//     post {
+//         always {
+//             echo 'Pipeline execution completed.'
+//         }
+//     }
+// }
+
 pipeline {
     agent any
 
     environment {
-        DOCKERHUB_CREDENTIALS = 'dockerhub-credentials'
-        REPO_NAME = 'myimages'
-        IMAGE_NAME = 'mypython_image'
+        PYTHON_VERSIONS = '3.8 3.9'
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
+        REPO_NAME = 'morandan7/myimages'  // תיקון ל-Username שלך
     }
 
     stages {
-        stage('Clone Repository') {
+        stage('Clone') {
             steps {
-                git branch: 'jenkins-workshop', url: 'https://github.com/MoranDanino/devopshift-welcome.git'
+                git branch: 'main', url: 'https://github.com/Nehorai4/jenkins-git-demo.git'
             }
         }
 
@@ -22,7 +127,7 @@ pipeline {
                 }
             }
             steps {
-                sh "pip install faker"
+                sh 'pip install faker'
             }
         }
 
@@ -31,7 +136,7 @@ pipeline {
                 axes {
                     axis {
                         name 'PYTHON_VERSION'
-                        values "3.8", "3.9"  // ✅ Fixed: Now a valid list
+                        values '3.8', '3.9'
                     }
                 }
                 stages {
@@ -43,6 +148,7 @@ pipeline {
                             }
                         }
                         steps {
+                            sh 'pip install faker'
                             sh 'python app.py'
                         }
                     }
@@ -55,16 +161,14 @@ pipeline {
                 axes {
                     axis {
                         name 'PYTHON_VERSION'
-                        values "3.8", "3.9"  // ✅ Fixed: No undefined variable
+                        values '3.8', '3.9'
                     }
                 }
                 stages {
                     stage('Build Image') {
                         steps {
                             script {
-                                sh """
-                                    docker build --build-arg PYTHON_VERSION=${PYTHON_VERSION} -t ${REPO_NAME}:${PYTHON_VERSION} .
-                                """
+                                def image = docker.build("${REPO_NAME}:${PYTHON_VERSION}", "--build-arg PYTHON_VERSION=${PYTHON_VERSION} .")
                             }
                         }
                     }
@@ -77,16 +181,15 @@ pipeline {
                 axes {
                     axis {
                         name 'PYTHON_VERSION'
-                        values "3.8", "3.9"  // ✅ Fixed: No undefined variable
+                        values '3.8', '3.9'
                     }
                 }
                 stages {
                     stage('Push Image') {
                         steps {
                             script {
-                                docker.withRegistry('https://index.docker.io/v1/', env.DOCKERHUB_CREDENTIALS) {
-                                    def appImage = docker.image("${REPO_NAME}:${PYTHON_VERSION}")
-                                    appImage.push()
+                                docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
+                                    docker.image("${REPO_NAME}:${PYTHON_VERSION}").push()
                                 }
                             }
                         }
@@ -98,7 +201,7 @@ pipeline {
 
     post {
         always {
-            echo 'Pipeline execution completed.'
+            deleteDir()
         }
     }
 }
