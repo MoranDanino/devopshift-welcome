@@ -1,7 +1,7 @@
 node {
 
     //define reusable func
-    def runStage { stage_name, command ->
+    def runStage = { stage_name, command ->
         stage(stage_name){
             echo "Starting stage: ${stageName}"
             sh command
@@ -23,16 +23,17 @@ node {
     //test stages- parallel tasks
     stage('parallel tasks'){
         parallel(
-            parallelStep.each { stageName ->
-                stage(stageName){
-                    runStage('stageName','echo "Running Python linting (e.g., flake8)..."')
-                }
-            }
-            // 'Linting':{
-            //     runStage('Linting','echo "Running Python linting (e.g., flake8)..."')
+            // parallelStep.each { stageName ->
+            //     stage(stageName){
+            //         runStage('stageName','echo "Running Python linting (e.g., flake8)..."')
+            //     }
             // }
-            // 'Security_test':{
-            //     runStage('Security_test','echo "Running security checks (e.g., safety)..."')
+            'Linting':{
+                runStage('Linting','echo "Running Python linting (e.g., flake8)..."')
+            },
+            'Security_test':{
+                runStage('Security_test','echo "Running security checks (e.g., safety)..."')
+            }
             // },
             // failFast: true
         )

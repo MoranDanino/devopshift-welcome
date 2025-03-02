@@ -1,0 +1,41 @@
+node {
+    // Define environment variables
+    def buildPath = "${env.WORKSPACE}/build"
+
+    // Build stage
+    stage('Build') {
+        echo "Building the project..."
+        // Build steps here, e.g., compile, package
+    }
+
+    // Test stage
+    stage('Test') {
+        echo "Running tests..."
+        // Test steps here, e.g., unit tests, integration tests
+    }
+
+    // Deploy stage
+    stage('Deploy') {
+        echo "Deploying to production..."
+        // Deployment steps here, e.g., upload artifacts, deploy to server
+    }
+
+    // Post-build actions
+    try {
+        echo "trying"
+        sh """ exit 1 """
+    } catch (e){
+        echo "errrr"
+        throw e
+    } finally {
+        echo "always!"
+        
+    }
+    
+    // post {
+    //     always {
+    //         echo "Cleaning up..."
+    //         // Cleanup steps, e.g., delete temporary files
+    //     }
+    // }
+}
