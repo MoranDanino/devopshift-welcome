@@ -1,7 +1,7 @@
 node {
 
     //define reusable func
-    def runStage = { stage_name, command ->
+    def runStage = { stageName, command ->
         stage(stageName) {
             echo "Starting stage: ${stageName}"
             sh command
@@ -21,72 +21,84 @@ node {
     }
 
     //test stages- parallel tasks
-    stage('parallel tasks'){
-        parallel(
-            // parallelStep.each { stageName ->
-            //     stage(stageName){
-            //         runStage('stageName','echo "Running Python linting (e.g., flake8)..."')
-            //     }
-            // }
-            'Linting':{
-                runStage('Linting','echo "Running Python linting (e.g., flake8)..."')
+    // stage('parallel tasks'){
+    //     parallel(
+    //         // parallelStep.each { stageName ->
+    //         //     stage(stageName){
+    //         //         runStage('stageName','echo "Running Python linting (e.g., flake8)..."')
+    //         //     }
+    //         // }
+    //         'Linting':{
+    //             runStage('Linting','echo "Running Python linting (e.g., flake8)..."')
+    //         },
+    //         'Security_test':{
+    //             runStage('Security_test','echo "Running security checks (e.g., safety)..."')
+    //         }
+    //         // },
+    //         // failFast: true
+    //     )
+    // }
+
+    stage('Parallel Tasks') {
+        parallel (
+            'Lint': {
+                runStage('Lint', 'echo "Running Python linting..."')
             },
-            'Security_test':{
-                runStage('Security_test','echo "Running security checks (e.g., safety)..."')
+            'Security Test': {
+                runStage('Security Test', 'echo "Running security tests..."')
             }
-            // },
-            // failFast: true
         )
     }
 
     //user input for deployment
-    stage('Wait for User Approval') {
-        steps {
-            script {
-                // Wait for user interaction and store the result
-                def userInput = input message: 'continue to deployment?',
-                                        parameters: [choice(name: 'Proceed', choices: 'Proceed\nAbort', description: 'Choose an option')]
-                // Set a variable based on user input
-                env.USER_CHOICE = userInput
-            }
-        }
-    }
+    // stage('Wait for User Approval') {
+    //     steps {
+    //         script {
+    //             // Wait for user interaction and store the result
+    //             def userInput = input message: 'continue to deployment?',
+    //                                     parameters: [choice(name: 'Proceed', choices: 'Proceed\nAbort', description: 'Choose an option')]
+    //             // Set a variable based on user input
+    //             env.USER_CHOICE = userInput
+    //         }
+    //     }
+    // }
 
-    stage('Continue to deployment') {
-        // Run this stage ONLY! if the user chooses 'Proceed'
-        when {
-            expression { env.USER_CHOICE == 'Proceed' }
-        }
-        steps {
-            script {
-                echo 'Continuing to deployment...'
-            }
-        }
-    }
+    // stage('Continue to deployment') {
+    //     // Run this stage ONLY! if the user chooses 'Proceed'
+    //     when {
+    //         expression { env.USER_CHOICE == 'Proceed' }
+    //     }
+    //     steps {
+    //         script {
+    //             echo 'Continuing to deployment...'
+    //         }
+    //     }
+    // }
 
-    stage('Abort the deployment') {
-        // Run this stage ONLY! if the user chooses 'Abort'
-        when {
-            expression { env.USER_CHOICE == 'Abort' }
-        }
-        steps {
-            script {
-                error 'Pipeline aborted by the user - cant run deployment'
-            }
-        }
-    }
+    // stage('Abort the deployment') {
+    //     // Run this stage ONLY! if the user chooses 'Abort'
+    //     when {
+    //         expression { env.USER_CHOICE == 'Abort' }
+    //     }
+    //     steps {
+    //         script {
+    //             error 'Pipeline aborted by the user - cant run deployment'
+    //         }
+    //     }
+    // }
 
     //deployment stage
     stage('deployment'){
-        steps{
-            script{
-                if (env.USER_CHOICE == 'Proceed'){
-                    runStage('deployment','echo "Deploying Python project to production..."')
-                } else{
-                    echo "pipeline abort bu the user"
-                }
-            }
-        }
+        // steps{
+        //     script{
+        //         if (env.USER_CHOICE == 'Proceed'){
+        //             runStage('deployment','echo "Deploying Python project to production..."')
+        //         } else{
+        //             echo "pipeline abort bu the user"
+        //         }
+        //     }
+        // }
+        echo "Deployment!!!"
         
     }
 
