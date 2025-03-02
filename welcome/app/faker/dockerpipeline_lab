@@ -9,10 +9,9 @@ pipeline {
     }
 
     stages {
-        stage('Set Up Matrix') {
+        stage('Set Up Python Versions') {
             steps {
                 script {
-                    // Convert the string of versions into a list
                     PYTHON_VERSION_LIST = PYTHON_VERSIONS.split(',')
                 }
             }
