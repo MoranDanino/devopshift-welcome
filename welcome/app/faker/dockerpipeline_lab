@@ -78,8 +78,8 @@ pipeline {
             matrix {
                 axes {
                     axis {
-                        docker.withRegistry()
-                        docker.image()
+                        // docker.withRegistry()
+                        // docker.image()
 
                         docker.withRegistry('https://index.docker.io/v1/', env.DOCKERHUB_CREDENTIALS) {
                         // name '?' // TIP: Name your axis to reference the Python version
