@@ -2,21 +2,12 @@ pipeline {
     agent any
 
     environment {
-        PYTHON_VERSIONS = "3.9,3.8"
         DOCKERHUB_CREDENTIALS = 'dockerhub-credentials'
         REPO_NAME = 'myimages'
         IMAGE_NAME = 'mypython_image'
     }
 
     stages {
-        stage('Set Up Python Versions') {
-            steps {
-                script {
-                    PYTHON_VERSION_LIST = PYTHON_VERSIONS.split(',')
-                }
-            }
-        }
-
         stage('Clone Repository') {
             steps {
                 git branch: 'jenkins-workshop', url: 'https://github.com/MoranDanino/devopshift-welcome.git'
@@ -36,19 +27,23 @@ pipeline {
         }
 
         stage('Test Application') {
-            steps {
-                script {
-                    for (version in PYTHON_VERSION_LIST) {
-                        stage("Test with Python ${version}") {
-                            agent {
-                                docker {
-                                    image "python:${version}"
-                                    reuseNode true
-                                }
+            matrix {
+                axes {
+                    axis {
+                        name 'PYTHON_VERSION'
+                        values ["3.8", "3.9"]  // ✅ Fixed: Now a valid list
+                    }
+                }
+                stages {
+                    stage('Run Test') {
+                        agent {
+                            docker {
+                                image "python:${PYTHON_VERSION}"
+                                reuseNode true
                             }
-                            steps {
-                                sh 'python app.py'
-                            }
+                        }
+                        steps {
+                            sh 'python app.py'
                         }
                     }
                 }
@@ -56,13 +51,21 @@ pipeline {
         }
 
         stage('Build Docker Images') {
-            steps {
-                script {
-                    for (version in PYTHON_VERSION_LIST) {
-                        stage("Build Image for Python ${version}") {
-                            sh """
-                                docker build --build-arg PYTHON_VERSION=${version} -t ${REPO_NAME}:${version} .
-                            """
+            matrix {
+                axes {
+                    axis {
+                        name 'PYTHON_VERSION'
+                        values ["3.8", "3.9"]  // ✅ Fixed: No undefined variable
+                    }
+                }
+                stages {
+                    stage('Build Image') {
+                        steps {
+                            script {
+                                sh """
+                                    docker build --build-arg PYTHON_VERSION=${PYTHON_VERSION} -t ${REPO_NAME}:${PYTHON_VERSION} .
+                                """
+                            }
                         }
                     }
                 }
@@ -70,13 +73,21 @@ pipeline {
         }
 
         stage('Push to DockerHub') {
-            steps {
-                script {
-                    docker.withRegistry('https://index.docker.io/v1/', env.DOCKERHUB_CREDENTIALS) {
-                        for (version in PYTHON_VERSION_LIST) {
-                            stage("Push Image for Python ${version}") {
-                                def appImage = docker.image("${REPO_NAME}:${version}")
-                                appImage.push()
+            matrix {
+                axes {
+                    axis {
+                        name 'PYTHON_VERSION'
+                        values ["3.8", "3.9"]  // ✅ Fixed: No undefined variable
+                    }
+                }
+                stages {
+                    stage('Push Image') {
+                        steps {
+                            script {
+                                docker.withRegistry('https://index.docker.io/v1/', env.DOCKERHUB_CREDENTIALS) {
+                                    def appImage = docker.image("${REPO_NAME}:${PYTHON_VERSION}")
+                                    appImage.push()
+                                }
                             }
                         }
                     }
