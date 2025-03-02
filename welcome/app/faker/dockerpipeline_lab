@@ -55,7 +55,7 @@ pipeline {
                 axes {
                     axis {
                         name 'PYTHON_VERSION'
-                        values ["3.8", "3.9"]  // ✅ Fixed: No undefined variable
+                        values "3.8", "3.9"  // ✅ Fixed: No undefined variable
                     }
                 }
                 stages {
@@ -77,7 +77,7 @@ pipeline {
                 axes {
                     axis {
                         name 'PYTHON_VERSION'
-                        values ["3.8", "3.9"]  // ✅ Fixed: No undefined variable
+                        values "3.8", "3.9"  // ✅ Fixed: No undefined variable
                     }
                 }
                 stages {
