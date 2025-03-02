@@ -2,22 +2,22 @@ node {
 
     //define reusable func
     def runStage = { stage_name, command ->
-        stage(stage_name){
+        stage(stageName) {
             echo "Starting stage: ${stageName}"
             sh command
         }
     }
 
-    def parallelStep = ['Linting','Security']
+    // def parallelStep = ['Linting','Security']
 
     //clone repo from git
     stage('Clone'){
-        runStage('Security_test','echo "Cloning repository..."')
+        runStage('Clone','echo "Cloning repository..."')
     }
 
     //build stage
     stage('build'){
-        runStage('Security_test','echo "Building Python project..."')
+        runStage('build','echo "Building Python project..."')
     }
 
     //test stages- parallel tasks
