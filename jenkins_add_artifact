@@ -57,7 +57,7 @@ pipeline {
                         fi
 
                         echo "Starting Flask application on 0.0.0.0:5001..."
-                        nohup flask run --host=0.0.0.0 --port=5001 > flask_app.log 2>&1 &
+                        nohup flask run --host=0.0.0.0 --port=5001 > flask_app.log 2>&1 &   
                         '''
                     }
                 }
@@ -75,7 +75,6 @@ pipeline {
                         // Sleep to allow Flask to start
                         sleep 5
 
-                        echo "Verify application -------------" > verify.txt
                         // Verify Flask application is running
                         def tasks = sh(script: "pgrep -f 'flask run'", returnStatus: true) ? '' : sh(script: "pgrep -f 'flask run'", returnStdout: true).trim()
                         if (!tasks) {
@@ -86,7 +85,6 @@ pipeline {
                         } else {
                             echo "Flask application is running successfully."
                         }
-                        archiveArtifacts artifacts: './verify.txt', allowEmptyArchive: true
                     }
                 }
             }
@@ -149,6 +147,7 @@ echo 'Running automated tests...'
                     }
                 }
             }
+        
 
     post {
         always {
