@@ -5,7 +5,7 @@ metadata:
 spec:
   type: NodePort # No need to use LB OR BROWSE THE APPLICATION 
   ports:
-    - port: 5011
-      targetPort: 5011
+    - port: 5002
+      targetPort: 5002
   selector:
     app: fe
