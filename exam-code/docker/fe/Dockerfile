@@ -11,4 +11,4 @@ COPY ./src .
 #change the name of the main file to the correct name
 CMD ["python", "mainfe.py"] 
 
-EXPOSE 5003
+EXPOSE 5011

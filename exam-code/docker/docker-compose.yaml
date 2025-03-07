@@ -3,7 +3,7 @@ services:
     build: ./fe
     image: "morandan7/fe-exam:latest"
     ports:
-      - "5003:5003"
+      - "5011:5011"
     depends_on:
       - backend-service
     networks:
