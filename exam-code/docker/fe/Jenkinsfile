@@ -84,10 +84,10 @@ pipeline {
                     pwd
                     ls -la 
                     cd exam-code/docker
-                    if [ ! -f docker-compose.yaml ]; then
-                        echo "docker-compose.yaml not found!"
-                        exit 1
-                    fi
+                    #if [ ! -f docker-compose.yaml ]; then
+                    #    echo "docker-compose.yaml not found!"
+                    #    exit 1
+                    #fi
                     
                     docker-compose -p fe-exam-integration down || true
                     docker-compose -p fe-exam-integration up -d --build
@@ -133,9 +133,6 @@ pipeline {
                     
                     
                     docker-compose -p fe-exam-integration down || true
-                    
-                    #integration test issues not block deployment
-                    #exit 0
                 '''
             }
         }
