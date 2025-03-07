@@ -2,7 +2,6 @@ pipeline {
     agent {
         docker {
             image 'python:3.10'
-            args '--privileged -v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
     environment {
@@ -86,7 +85,6 @@ pipeline {
                     docker-compose up -d
                     sleep 20
                     curl -f http://localhost:5002 || echo "curl not working"
-                    docker ps -a 
                     docker-compose down 
                 '''
             }
