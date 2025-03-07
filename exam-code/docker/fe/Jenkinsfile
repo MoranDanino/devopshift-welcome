@@ -76,9 +76,18 @@ pipeline {
             }
         }
 
-        // stage('Integration Test with Docker Compose'){
-
-        // }
+        stage('Integration Test with Docker Compose'){
+            steps {
+                sh '''
+                    pwd
+                    ls -la
+                    docker-compose up -d
+                    sleep 10  # Allow services to start
+                    curl -f http://localhost:5002 || exit 1  # Adjust for backend if needed
+                    docker-compose down
+                '''
+            }
+        }
 
 
 
