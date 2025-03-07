@@ -43,12 +43,19 @@ pipeline {
                 sh 'git status'
                 sh 'git branch'
                 sh 'find . -type d'
-                sh 'cd fe && pip install -r requirements.txt' 
+                sh 'cd fe && pip install -r exam-code/docker/fe/requirements.txt' 
             }
         }
 
         // stage('Build Docker Image'){
-
+        //     steps {
+        //         dir('fe') {
+        //             script {
+        //                 sh 'docker build -t ${DOCKER_REGISTRY}/${REPO_NAME}:${IMAGE_TAG} .'
+        //                 sh 'docker tag ${DOCKER_REGISTRY}/${REPO_NAME}:${IMAGE_TAG} ${DOCKER_REGISTRY}/${REPO_NAME}:${IMAGE_TAG}'
+        //             }
+        //         }
+        //     }
         // }
 
 
