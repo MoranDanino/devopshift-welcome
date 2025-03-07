@@ -86,7 +86,7 @@ pipeline {
                     cd exam-code/docker
                     ls -la
                     docker-compose -f docker-compose.yaml up -d
-                    sleep time: 20
+                    sleep 20
                     docker ps -a 
                     docker-compose -f docker-compose.yaml down
                 '''
