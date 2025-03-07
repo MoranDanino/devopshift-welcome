@@ -89,7 +89,7 @@ pipeline {
                     docker ps -a
                     docker-compose logs
 
-                    curl -f http://localhost:5002 || exit 1  # Adjust for backend if needed
+                    curl -f http://localhost:5003 || exit 1  # Adjust for backend if needed
                     docker-compose down
                 '''
             }
