@@ -22,7 +22,6 @@ pipeline {
             parallel{
                 stage('Flake8 Linting') {
                     steps {
-                        //sh 'pip install --upgrade pip'
                         sh 'pip install flake8'
                         sh 'flake8 . || true'
                     }
@@ -30,13 +29,22 @@ pipeline {
                 
                 stage('Bandit Security Scan') {
                     steps {
-                        //sh 'pip install --upgrade pip'
                         sh 'pip install bandit'
                         sh 'bandit -r . || true'  
                     }
                 }
             }
         }
+
+        stage('Install Dependencies') {
+            steps {
+                sh 'pip install -r fe/requirements.txt'
+            }
+        }
+
+
+
+
     }
 
     post {
