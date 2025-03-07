@@ -85,13 +85,14 @@ pipeline {
                     ls -la 
                     cd exam-code/docker
                     ls -la
-                    sh 'docker-compose -f docker-compose.yaml up -d'
-                    sleep time: 10, unit: 'SECONDS' 
-                    sh 'docker ps -a 
-                    sh 'docker-compose -f docker-compose.yaml down'
+                    docker-compose -f docker-compose.yaml up -d
+                    sleep time: 20
+                    docker ps -a 
+                    docker-compose -f docker-compose.yaml down
                 '''
             }
         }
+
 
         // stage('Integration Test with Docker Compose'){
         //     steps {
