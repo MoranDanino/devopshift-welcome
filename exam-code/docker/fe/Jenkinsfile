@@ -78,7 +78,7 @@ pipeline {
             }
         }
 
-                stage('Integration Test with Docker Compose'){
+        stage('Integration Test with Docker Compose'){
             steps {
                 sh '''
                     pwd
