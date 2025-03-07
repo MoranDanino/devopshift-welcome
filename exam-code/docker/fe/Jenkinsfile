@@ -44,7 +44,7 @@ pipeline {
             }
         }
 
-        //add stage to handle error: Docker not found && download docker-compose
+        //add stage to handle errors: Docker not found && download docker-compose
         stage('Install Docker'){
             steps{
                 sh '''
@@ -87,47 +87,12 @@ pipeline {
                     ls -la
                     docker-compose -f docker-compose.yaml up -d
                     sleep 20
+                    curl -f http://localhost:5011 || exit 1
                     docker ps -a 
                     docker-compose -f docker-compose.yaml down
                 '''
             }
         }
-
-
-        // stage('Integration Test with Docker Compose'){
-        //     steps {
-        //         sh '''
-        //             pwd
-        //             ls -la 
-        //             cd exam-code/docker
-                    
-        //             docker-compose -p fe-exam-integration down || true
-        //             docker-compose -p fe-exam-integration up -d --build
-
-        //             sleep 20
-                    
-        //             docker ps -a
-                    
-        //             WEB_IP=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' fe-exam-integration-web-1)
-        //             echo "Web container IP is: $WEB_IP"
-                        
-        //             # Try different curl approaches
-        //             curl -v http://localhost:5011/ || echo "Failed to connect via localhost"
-        //             curl -v http://$WEB_IP:5011/ || echo "Failed to connect via container IP"
-                        
-        //             # Check container port mappings
-        //             docker port fe-exam-integration-web-1
-                        
-        //             # Check logs for potential issues
-        //             docker logs fe-exam-integration-web-1
-                    
-        //             docker logs fe-exam-integration-backend-service-1 || true
-        //             docker logs fe-exam-integration-mysqldb-1 || true
-                    
-        //             docker-compose -p fe-exam-integration down || true
-        //         '''
-        //     }
-        // }
 
         stage('Push to Docker Hub'){
             steps{
