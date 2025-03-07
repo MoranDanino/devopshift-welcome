@@ -84,16 +84,14 @@ pipeline {
                     pwd
                     ls -la
                     ls exam-code/docker
-                    // cd exam-code/docker && docker-compose up -d
+                    # cd exam-code/docker && docker-compose up -d
                     cd exam-code/docker
                     docker-compose -p fe-exam-integration down || true
                     docker-compose -p fe-exam-integration up -d --build
                     sleep 40  # Allow services to start
 
                     docker ps -a
-
-                    // curl -f http://localhost:5011/ || exit 1
-                    // curl -f http://localhost:5001/ || exit 1
+                    
                     curl -f http://localhost:5011 || exit 1  # Adjust for backend if needed
                     docker-compose -p fe-exam-integration down || true
                 '''
