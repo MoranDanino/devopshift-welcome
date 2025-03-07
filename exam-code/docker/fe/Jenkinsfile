@@ -85,10 +85,13 @@ pipeline {
                     ls -la 
                     cd exam-code/docker
                     ls -la
-                    docker-compose -f docker-compose.yaml up -d
+                    #docker-compose -f docker-compose.yaml up -d
+                    docker-compose up -d
                     sleep 20
+                    curl -f http://localhost:5002 || echo "curl not working"
                     docker ps -a 
-                    docker-compose -f docker-compose.yaml down
+                    docker-compose up -d
+                    #docker-compose -f docker-compose.yaml down
                 '''
             }
         }
