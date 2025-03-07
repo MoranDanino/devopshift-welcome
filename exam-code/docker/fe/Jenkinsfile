@@ -61,7 +61,7 @@ pipeline {
 
         stage('Build Docker Image'){
             steps {
-                dir('fe') {
+                dir('exam-code/docker/fe') {
                     script {
                         sh 'docker build -t ${DOCKER_REGISTRY}/${REPO_NAME}:${IMAGE_TAG} .'
                         sh 'docker tag ${DOCKER_REGISTRY}/${REPO_NAME}:${IMAGE_TAG} ${DOCKER_REGISTRY}/${REPO_NAME}:${IMAGE_TAG}'
@@ -76,7 +76,7 @@ pipeline {
         //     }
         // }
 
-        // stage(''){
+        // stage('Integration Test with Docker Compose'){
 
         // }
 
