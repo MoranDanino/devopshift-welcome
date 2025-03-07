@@ -40,21 +40,23 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 sh 'ls -l'
-                sh 'ls -l'
-                sh 'git status'
-                sh 'git branch'
-                sh 'find . -type d'
                 sh 'cd exam-code/docker/fe && pip install -r requirements.txt' 
             }
         }
 
-        //add stage to handle error: Docker not found
+        //add stage to handle error: Docker not found && download docker-compose
         stage('Install Docker'){
             steps{
                 sh '''
+                #install docker
                 apt-get update
                 apt-get install -y docker.io 
                 docker --version
+
+                #install docker-compose
+                sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+                sudo chmod +x /usr/local/bin/docker-compose
+                docker-compose --version
                 '''
             }
         }
