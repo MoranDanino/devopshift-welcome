@@ -53,7 +53,7 @@ pipeline {
             steps{
                 sh '''
                 apt-get update
-                apt-get install -y docker.il 
+                apt-get install -y docker.io 
                 docker --version
                 '''
             }
@@ -76,6 +76,9 @@ pipeline {
         //     }
         // }
 
+        // stage(''){
+
+        // }
 
 
 
