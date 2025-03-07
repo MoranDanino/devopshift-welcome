@@ -90,7 +90,7 @@ pipeline {
                     sleep 20
                     curl -f http://localhost:5002 || echo "curl not working"
                     docker ps -a 
-                    docker-compose up -d
+                    docker-compose dowm 
                     #docker-compose -f docker-compose.yaml down
                 '''
             }
