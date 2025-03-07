@@ -83,8 +83,12 @@ pipeline {
                 sh '''
                     pwd
                     ls -la
-                    cd exam-code/docker && docker-compose up -d
-                    sleep 10  # Allow services to start
+                    cd exam-code/docker && sudo docker-compose up -d
+                    sleep 30  # Allow services to start
+
+                    docker ps -a
+                    docker-compose logs
+                    
                     curl -f http://localhost:5002 || exit 1  # Adjust for backend if needed
                     docker-compose down
                 '''
