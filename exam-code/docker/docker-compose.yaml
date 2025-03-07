@@ -1,7 +1,7 @@
 services:
   web:
     build: ./fe
-    image: "yanivomc/fe-exam:latest"
+    image: "morandan7/fe-exam:latest"
     ports:
       - "5003:5003"
     depends_on:
@@ -11,7 +11,7 @@ services:
 
   backend-service:
     build: ./be
-    image: "yanivomc/be-exam:latest"
+    image: "morandan7/be-exam:latest"
     networks:
       - internal
     environment:
