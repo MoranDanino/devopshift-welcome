@@ -30,6 +30,7 @@ pipeline {
                 
                 stage('Bandit Security Scan') {
                     steps {
+                        sh 'pip install --upgrade pip'
                         sh 'pip install bandit'
                         sh 'bandit -r . || true'  
                     }
