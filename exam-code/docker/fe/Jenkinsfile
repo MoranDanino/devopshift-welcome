@@ -51,7 +51,11 @@ pipeline {
         //add stage to handle error: Docker not found
         stage('Install Docker'){
             steps{
-                sh 'apt update && apt install -y docker.i0'
+                sh '''
+                apt-get update
+                apt-get install -y docker.il 
+                docker --version
+                '''
             }
         }
 
@@ -71,6 +75,8 @@ pipeline {
         //         sh 'docker run --rm ${DOCKER_REGISTRY}/${REPO_NAME}:${IMAGE_TAG} pytest tests/'
         //     }
         // }
+
+
 
 
 
