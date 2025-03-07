@@ -78,37 +78,17 @@ pipeline {
             }
         }
 
-        stage('Integration Test with Docker Compose'){
+                stage('Integration Test with Docker Compose'){
             steps {
                 sh '''
                     pwd
                     ls -la 
                     cd exam-code/docker
                     
-                    docker-compose -p fe-exam-integration down || true
-                    docker-compose -p fe-exam-integration up -d --build
-
-                    sleep 20
-                    
-                    docker ps -a
-                    
-                    WEB_IP=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' fe-exam-integration-web-1)
-                    echo "Web container IP is: $WEB_IP"
-                        
-                    # Try different curl approaches
-                    curl -v http://localhost:5011/ || echo "Failed to connect via localhost"
-                    curl -v http://$WEB_IP:5011/ || echo "Failed to connect via container IP"
-                        
-                    # Check container port mappings
-                    docker port fe-exam-integration-web-1
-                        
-                    # Check logs for potential issues
-                    docker logs fe-exam-integration-web-1
-                    
-                    docker logs fe-exam-integration-backend-service-1 || true
-                    docker logs fe-exam-integration-mysqldb-1 || true
-                    
-                    docker-compose -p fe-exam-integration down || true
+                    sh 'docker-compose -f docker-compose.yaml up -d'
+                    sleep time: 10, unit: 'SECONDS'  // Wait for services to start
+                    sh 'docker ps -a 
+                    sh 'docker-compose -f docker-compose.yaml down'
                 '''
             }
         }
@@ -127,41 +107,21 @@ pipeline {
                     
         //             docker ps -a
                     
-        //             if docker inspect fe-exam-integration-web-1 | grep -q '"Running": true'; then
-        //                 echo "Web container is running"
+        //             WEB_IP=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' fe-exam-integration-web-1)
+        //             echo "Web container IP is: $WEB_IP"
                         
-        //                 # Test from outside the container (from Jenkins container)
-        //                 echo "Testing access to web service from host..."
-        //                 # Get container IP
-        //                 WEB_IP=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' fe-exam-integration-web-1)
-        //                 echo "Web container IP is: $WEB_IP"
+        //             # Try different curl approaches
+        //             curl -v http://localhost:5011/ || echo "Failed to connect via localhost"
+        //             curl -v http://$WEB_IP:5011/ || echo "Failed to connect via container IP"
                         
-        //                 # Try different curl approaches
-        //                 curl -v http://localhost:5011/ || echo "Failed to connect via localhost"
-        //                 curl -v http://$WEB_IP:5011/ || echo "Failed to connect via container IP"
+        //             # Check container port mappings
+        //             docker port fe-exam-integration-web-1
                         
-        //                 # Check container port mappings
-        //                 docker port fe-exam-integration-web-1
-                        
-        //                 # Check logs for potential issues
-        //                 echo "Web container logs:"
-        //                 docker logs fe-exam-integration-web-1
-                        
-        //                 # Don't fail the pipeline - this test is informative
-        //                 echo "Integration test completed with observations"
-        //             else
-        //                 echo "Web container is not running"
-        //                 docker logs fe-exam-integration-web-1 || true
-        //                 # Don't fail, but log the issue
-        //                 echo "Integration test could not proceed - container not running"
-        //             fi
+        //             # Check logs for potential issues
+        //             docker logs fe-exam-integration-web-1
                     
-        //             # Print backend and DB logs for debugging
-        //             echo "Backend service logs:"
         //             docker logs fe-exam-integration-backend-service-1 || true
-        //             echo "Database logs:"
         //             docker logs fe-exam-integration-mysqldb-1 || true
-                    
                     
         //             docker-compose -p fe-exam-integration down || true
         //         '''
