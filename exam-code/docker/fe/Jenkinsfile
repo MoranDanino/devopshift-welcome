@@ -48,6 +48,13 @@ pipeline {
             }
         }
 
+        //add stage to handle error: Docker not found
+        stage('Install Docker'){
+            steps{
+                sh 'apt update && apt install -y docker.i0'
+            }
+        }
+
         stage('Build Docker Image'){
             steps {
                 dir('fe') {
