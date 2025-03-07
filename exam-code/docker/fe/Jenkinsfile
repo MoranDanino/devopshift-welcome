@@ -84,7 +84,7 @@ pipeline {
                     pwd
                     ls -la 
                     cd exam-code/docker
-                    
+                    ls -la
                     sh 'docker-compose -f docker-compose.yaml up -d'
                     sleep time: 10, unit: 'SECONDS'  // Wait for services to start
                     sh 'docker ps -a 
