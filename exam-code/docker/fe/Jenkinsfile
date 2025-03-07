@@ -81,17 +81,13 @@ pipeline {
         stage('Integration Test with Docker Compose'){
             steps {
                 sh '''
-                    pwd
-                    ls -la 
                     cd exam-code/docker
                     ls -la
-                    #docker-compose -f docker-compose.yaml up -d
                     docker-compose up -d
                     sleep 20
                     curl -f http://localhost:5002 || echo "curl not working"
                     docker ps -a 
                     docker-compose down 
-                    #docker-compose -f docker-compose.yaml down
                 '''
             }
         }
