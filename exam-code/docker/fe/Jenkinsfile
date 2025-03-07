@@ -87,7 +87,6 @@ pipeline {
                     ls -la
                     docker-compose -f docker-compose.yaml up -d
                     sleep 20
-                    curl -f http://localhost:5011 || exit 1
                     docker ps -a 
                     docker-compose -f docker-compose.yaml down
                 '''

@@ -44,7 +44,7 @@ pipeline {
             }
         }
 
-        //add stage to handle error: Docker not found && download docker-compose
+        //add stage to handle errors: Docker not found && download docker-compose
         stage('Install Docker'){
             steps{
                 sh '''
