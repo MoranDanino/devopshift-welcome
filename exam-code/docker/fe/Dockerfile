@@ -8,6 +8,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY ./src .
 
-CMD ["python", "main.py"]
+#change the name of the main file to the correct name
+CMD ["python", "mainfe.py"] 
 
 EXPOSE 5002

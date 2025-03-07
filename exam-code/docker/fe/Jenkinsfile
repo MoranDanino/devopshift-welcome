@@ -6,13 +6,49 @@ pipeline {
     }
     environment {
         DOCKERHUB_CREDENTIALS = credentials('docker-hub-creds')
-        DOCKER_REGISTRY = 'yanivomc'
+        DOCKER_REGISTRY = 'morandan7'
         REPO_NAME = 'fe-exam'  // Change to 'be-exam' for backend pipeline
         IMAGE_TAG = "${env.BUILD_NUMBER}"
         
     }
     stages {
-        
-        
-        
+        stage('Clone Repository') {
+            steps {
+                git branch: 'workshop/argo-jenkins-exam', url: 'https://github.com/MoranDanino/devopshift-welcome.git'
+            }
         }
+
+        stage('Lint & Security Scan'){
+            parallel{
+                stage('Flake8 Linting') {
+                    steps {
+                            sh 'pip install --upgrade pip'
+                            sh 'pip install flake8'
+                            sh 'flake8 . || true'
+                    }
+                }
+                
+                stage('Bandit Security Scan') {
+                    steps {
+                        sh 'pip install bandit'
+                        sh 'bandit -r . || true'  
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Cleaning up workspace'
+            deleteDir()
+        }
+        failure {
+            echo 'Failed'
+        }
+        success {
+            echo 'Success'
+        }
+    }
+
+}
