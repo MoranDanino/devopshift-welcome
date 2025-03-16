@@ -1,0 +1,6 @@
+dependencies:
+- name: try-a
+  repository: file://../try-a
+  version: 0.1.0
+digest: sha256:32e94b52c1af70bac0b49f087bfd088046cfd13fc3225eb1278ee4e2686d3914
+generated: "2025-03-16T13:04:26.692304946Z"

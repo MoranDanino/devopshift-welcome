@@ -1,0 +1,68 @@
+---
+# Source: my-chart/templates/ConfigMap.yaml
+apiversion: v1
+kind: ConfigMap
+data: |-
+    - apple: apple
+    - apple2: apple2
+    - apple3: apple3
+---
+# Source: my-chart/templates/Service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  selector:
+    app: nginx
+  ports:
+  - port: 8080
+    targetPort: 8080
+  type: ClusterIP
+---
+# Source: my-chart/templates/Deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: my-chart
+    env: test
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-chart
+      env: test
+  template:
+    metadata:
+      labels:
+        app: my-chart
+        env: test
+    spec:
+      containers:
+    #   - name: nginx
+    #     image: nginx:1.25.4
+      - name: nginx
+        image: "nginx : 1.25.4"        
+        ports:
+        - containerPort: 8080
+        resources:
+          limits:
+            cpu: 200m
+            memory: 256Mi
+          requests:
+            cpu: 100m
+            memory: 128mi
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5

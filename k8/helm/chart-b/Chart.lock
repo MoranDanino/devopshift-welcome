@@ -1,0 +1,6 @@
+dependencies:
+- name: chart-a
+  repository: file://../chart-a
+  version: 0.1.0
+digest: sha256:3c47098009387ab1b88e62386486a2af68fc2fcf38cf8e00d06a071e1514d2f0
+generated: "2025-03-16T12:27:28.373309353Z"

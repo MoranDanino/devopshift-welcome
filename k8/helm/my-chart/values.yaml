@@ -1,0 +1,42 @@
+app: 
+
+service: 
+  port: 8080
+
+image: 
+  repository: nginx
+  tag: 1.25.4
+
+containers:
+  name: nginx
+
+resources:
+  requests:
+    cpu: "100m"
+    memory: "128mi"
+  limits:
+    cpu: "200m"
+    memory: "256Mi"
+  
+list: 
+  - name: apple
+    app: apple
+  - name: apple2
+    app: apple2
+  - name: apple3
+    app: apple3
+
+
+  # probes:
+  #     - livenessProbe:
+  #       httpGet:
+  #         path: /
+  #         port: {{ .Values.service.port }}
+  #       initialDelaySeconds: 30
+  #       periodSeconds: 10
+  #     - readinessProbe:
+  #       httpGet:
+  #         path: /
+  #         port: {{ .Values.service.port }}
+  #       initialDelaySeconds: 5
+  #       periodSeconds: 5
